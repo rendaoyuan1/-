@@ -1,0 +1,24 @@
+{
+  "plugins": [
+    {
+      "name": "网易云音乐",
+      "url": "https://raw.githubusercontent.com/TZB679/USEFUL-MF-PLUG-INS/main/sinmite/netease%20v0.0.1.js",
+      "version": "0.0.1"
+    },
+    {
+      "name": "汽水音乐",
+      "url": "https://gitee.com/janyun/music-free-plugin/raw/master/qishui.vip.js",
+      "version": "2.0.0"
+    },
+    {
+      "name": "酷我音乐",
+      "url": "https://raw.githubusercontent.com/TZB679/USEFUL-MF-PLUG-INS/main/sinmite/kuwo%20v0.0.1.js",
+      "version": "0.0.1"
+    },
+    {
+      "name": "QQ音乐",
+      "url": "https://raw.githubusercontent.com/TZB679/USEFUL-MF-PLUG-INS/main/%E7%8C%AB%E5%A4%B4%E7%8C%AB(MF%E5%BC%80%E5%8F%91%E8%80%85)/QQ%20v0.2.2.js",
+      "version": "0.2.2"
+    }
+  ]
+}
