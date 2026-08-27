@@ -7,9 +7,9 @@
       "version": "stable"
     },
     {
-      "name": "汽水音乐（稳定源）",
-      "url": "https://gitee.com/hongmengv5/musicfree/raw/master/qishui.js",
-      "version": "0.1.5"
+      "name": "汽水音乐（GitHub源）",
+      "url": "https://cdn.jsdelivr.net/gh/qwerwhr/musicfree-plugins@main/汽水qishui音乐.js",
+      "version": "stable"
     },
     {
       "name": "酷我音乐（稳定源）",
