@@ -1,24 +1,25 @@
 {
+  "desc": "网易云、汽水、酷我、QQ 四源稳定版；仅选择公开维护的普通/非VIP插件，不提供付费内容绕过。",
   "plugins": [
     {
-      "name": "网易云音乐",
-      "url": "https://raw.githubusercontent.com/TZB679/USEFUL-MF-PLUG-INS/main/sinmite/netease%20v0.0.1.js",
-      "version": "0.0.1"
+      "name": "网易云音乐（稳定源）",
+      "url": "https://cdn.jsdelivr.net/gh/qwerwhr/musicfree-plugins@main/网易云音乐%20（非VIP）.js",
+      "version": "stable"
     },
     {
-      "name": "汽水音乐",
+      "name": "汽水音乐（稳定源）",
       "url": "https://gitee.com/hongmengv5/musicfree/raw/master/qishui.js",
       "version": "0.1.5"
     },
     {
-      "name": "酷我音乐",
-      "url": "https://raw.githubusercontent.com/TZB679/USEFUL-MF-PLUG-INS/main/sinmite/kuwo%20v0.0.1.js",
-      "version": "0.0.1"
+      "name": "酷我音乐（稳定源）",
+      "url": "https://cdn.jsdelivr.net/gh/qwerwhr/musicfree-plugins@main/云音乐%20（酷我非VIP）.js",
+      "version": "stable"
     },
     {
-      "name": "QQ音乐",
-      "url": "https://raw.githubusercontent.com/TZB679/USEFUL-MF-PLUG-INS/main/%E7%8C%AB%E5%A4%B4%E7%8C%AB(MF%E5%BC%80%E5%8F%91%E8%80%85)/QQ%20v0.2.2.js",
-      "version": "0.2.2"
+      "name": "QQ音乐（稳定源）",
+      "url": "https://cdn.jsdelivr.net/gh/qwerwhr/musicfree-plugins@main/QQ音乐%20（非VIP）.js",
+      "version": "stable"
     }
   ]
 }
