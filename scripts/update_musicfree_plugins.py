@@ -75,7 +75,6 @@ def select_latest(paths, predicate):
 
 
 def generate_four_pack(candidates):
-    # 选用明确的普通音乐源；排除名称中明确标注 VIP/会员绕过的候选。
     safe = [p for p in candidates if "vip" not in p.lower() and "会员" not in p]
 
     netease = select_latest(
@@ -95,11 +94,11 @@ def generate_four_pack(candidates):
     if netease:
         plugins.append({"name": "网易云音乐", "url": raw_url(netease), "version": version_text(netease)})
 
-    # 该地址指向上游 master 文件本身；上游更新后无需改变本 JSON 即会读取最新版。
+    # 使用当前公开 MusicFree 聚合源中仍在维护的汽水插件地址。
     plugins.append({
         "name": "汽水音乐",
-        "url": "https://gitee.com/janyun/music-free-plugin/raw/master/qishui.vip.js",
-        "version": "upstream-master",
+        "url": "https://gitee.com/hongmengv5/musicfree/raw/master/qishui.js",
+        "version": "0.1.5",
     })
 
     if kuwo:
