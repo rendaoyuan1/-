@@ -6,6 +6,7 @@ from urllib.parse import quote
 SOURCE_REPO = "TZB679/USEFUL-MF-PLUG-INS"
 SOURCE_BRANCH = "main"
 OUTPUT = "musicfree-unified-plugins.json"
+FOUR_PACK_OUTPUT = "musicfree-4pack.json"
 TREE_API = f"https://api.github.com/repos/{SOURCE_REPO}/git/trees/{SOURCE_BRANCH}?recursive=1"
 
 EXCLUDE_MARKERS = [
@@ -19,7 +20,6 @@ EXCLUDE_MARKERS = [
     "Ver.2",
 ]
 
-# 同一插件有多个版本时，用去掉版本号后的路径作为分组键，优先保留版本号更高的文件。
 VERSION_RE = re.compile(r"(?:\s+v?|\()(?P<v>\d+(?:\.\d+){0,3})(?:\)|\s|$)", re.I)
 
 
@@ -39,8 +39,7 @@ def version_tuple(path):
     matches = list(VERSION_RE.finditer(path))
     if not matches:
         return (0,)
-    nums = matches[-1].group("v").split(".")
-    return tuple(int(x) for x in nums)
+    return tuple(int(x) for x in matches[-1].group("v").split("."))
 
 
 def version_text(path):
@@ -49,7 +48,6 @@ def version_text(path):
 
 
 def group_key(path):
-    # 仅在同一目录中合并同名不同版本，避免 QQ / 网易云等不同作者插件互相覆盖。
     directory, filename = path.rsplit("/", 1) if "/" in path else ("", path)
     stem = filename[:-3]
     stem = re.sub(r"\s+[vV]?\d+(?:\.\d+){0,3}.*$", "", stem).strip()
@@ -60,7 +58,6 @@ def display_name(path):
     filename = path.rsplit("/", 1)[-1][:-3]
     filename = re.sub(r"\s+[vV]?\d+(?:\.\d+){0,3}.*$", "", filename).strip()
     parent = path.split("/")[0] if "/" in path else ""
-    # 为常见重复名称加来源前缀，导入后更容易区分。
     if filename.lower() in {"qq", "youtube", "bilibili", "migu", "kugou", "kuwo", "netease", "webdav", "navidrome"}:
         return f"{parent}-{filename}" if parent else filename
     return filename
@@ -68,6 +65,53 @@ def display_name(path):
 
 def raw_url(path):
     return f"https://raw.githubusercontent.com/{SOURCE_REPO}/{SOURCE_BRANCH}/" + quote(path, safe="/()[],-._")
+
+
+def select_latest(paths, predicate):
+    matches = [p for p in paths if predicate(p)]
+    if not matches:
+        return None
+    return max(matches, key=lambda p: (version_tuple(p), p.lower()))
+
+
+def generate_four_pack(candidates):
+    # 选用明确的普通音乐源；排除名称中明确标注 VIP/会员绕过的候选。
+    safe = [p for p in candidates if "vip" not in p.lower() and "会员" not in p]
+
+    netease = select_latest(
+        safe,
+        lambda p: p.startswith("sinmite/") and p.rsplit("/", 1)[-1].lower().startswith("netease ") and "netease_fm" not in p.lower(),
+    )
+    kuwo = select_latest(
+        safe,
+        lambda p: p.startswith("sinmite/") and p.rsplit("/", 1)[-1].lower().startswith("kuwo "),
+    )
+    qq = select_latest(
+        safe,
+        lambda p: p.startswith("猫头猫(MF开发者)/") and p.rsplit("/", 1)[-1].lower().startswith("qq "),
+    )
+
+    plugins = []
+    if netease:
+        plugins.append({"name": "网易云音乐", "url": raw_url(netease), "version": version_text(netease)})
+
+    # 该地址指向上游 master 文件本身；上游更新后无需改变本 JSON 即会读取最新版。
+    plugins.append({
+        "name": "汽水音乐",
+        "url": "https://gitee.com/janyun/music-free-plugin/raw/master/qishui.vip.js",
+        "version": "upstream-master",
+    })
+
+    if kuwo:
+        plugins.append({"name": "酷我音乐", "url": raw_url(kuwo), "version": version_text(kuwo)})
+    if qq:
+        plugins.append({"name": "QQ音乐", "url": raw_url(qq), "version": version_text(qq)})
+
+    with open(FOUR_PACK_OUTPUT, "w", encoding="utf-8", newline="\n") as f:
+        json.dump({"plugins": plugins}, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+
+    print(f"Generated {FOUR_PACK_OUTPUT} with {len(plugins)} plugins")
 
 
 def main():
@@ -96,12 +140,12 @@ def main():
             "version": version_text(path),
         })
 
-    output = {"plugins": plugins}
     with open(OUTPUT, "w", encoding="utf-8", newline="\n") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
+        json.dump({"plugins": plugins}, f, ensure_ascii=False, indent=2)
         f.write("\n")
 
     print(f"Generated {OUTPUT} with {len(plugins)} plugins")
+    generate_four_pack(candidates)
 
 
 if __name__ == "__main__":
