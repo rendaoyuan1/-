@@ -25,17 +25,17 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Generate subscription
+      - name: Generate subscriptions
         run: python scripts/update_musicfree_plugins.py
 
       - name: Commit changes
         run: |
-          if git diff --quiet -- musicfree-unified-plugins.json; then
+          if git diff --quiet -- musicfree-unified-plugins.json musicfree-4pack.json; then
             echo "No plugin changes."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add musicfree-unified-plugins.json
-          git commit -m "Auto update MusicFree plugins"
+          git add musicfree-unified-plugins.json musicfree-4pack.json
+          git commit -m "Auto update MusicFree subscriptions"
           git push
